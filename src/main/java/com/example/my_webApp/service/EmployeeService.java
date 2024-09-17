@@ -4,5 +4,5 @@ import com.example.my_webApp.dto.RequestDTOs.EmployeeRequestDTO;
 import com.example.my_webApp.dto.ResponseDTO;
 
 public interface EmployeeService {
-    ResponseDTO saveEmployee(EmployeeRequestDTO employeeRequestDTO);
+    ResponseDTO<T> saveEmployee(EmployeeRequestDTO employeeRequestDTO);
 }

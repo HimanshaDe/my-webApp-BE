@@ -2,6 +2,7 @@ package com.example.my_webApp.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ResponseDTO {
+public class ResponseDTO<T> implements Serializable {
     private int status;
     private Object data;
 

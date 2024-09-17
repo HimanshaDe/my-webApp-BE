@@ -18,9 +18,9 @@ public class EmployeeController {
     EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> saveEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO){
+    public ResponseEntity<ResponseDTO<T>> saveEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO){
         log.info("EmployeeController.saveEmployee() method accessed..");
-        ResponseDTO responseDTO = employeeService.saveEmployee(employeeRequestDTO);
+        ResponseDTO<T> responseDTO = employeeService.saveEmployee(employeeRequestDTO);
         return ResponseEntity.status(responseDTO.getStatus()).body(responseDTO);
     }
 }
