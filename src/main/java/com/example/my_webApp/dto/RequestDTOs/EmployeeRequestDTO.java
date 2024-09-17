@@ -11,6 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeRequestDTO {
-    private Integer employeeId;
     private String employeeName;
 }

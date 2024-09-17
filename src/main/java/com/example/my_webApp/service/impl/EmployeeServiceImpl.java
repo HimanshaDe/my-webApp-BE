@@ -8,7 +8,12 @@ import com.example.my_webApp.service.EmployeeService;
 import com.example.my_webApp.util.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -21,26 +26,46 @@ public class EmployeeServiceImpl implements EmployeeService {
         ResponseDTO responseDTO = new ResponseDTO();
 
         try {
-            // Check if the employee already exists
             Boolean isEmployeeExists = employeeRepo.existsByEmployeeNameIgnoreCase(employeeRequestDTO.getEmployeeName());
-
             if (isEmployeeExists) {
-                // Handle conflict response if the employee already exists
                 return ResponseUtils.handleConflictResponse(responseDTO, "Employee already exists");
             }
-
-            // Create and save a new employee if it doesn't exist
             Employee employee = new Employee();
-            employee.setEmployeeName(employeeRequestDTO.getEmployeeName());
+            employee.setEmployeeName(employeeRequestDTO.getEmployeeName().toLowerCase());
             employeeRepo.save(employee);
-
-            // Handle success response after saving the employee
-            return ResponseUtils.handleOkResponse(responseDTO, "Employee created successfully!");
-
+            return ResponseUtils.handleOkResponse(responseDTO, responseDTO,"Employee created successfully!");
         } catch (Exception e) {
-            // Handle any unexpected errors
             return ResponseUtils.handleErrorResponse(responseDTO, "An error occurred while saving the employee.");
         }
+    }
+
+    @Override
+    public ResponseDTO getEmployeeList() {
+        ResponseDTO responseDTO = new ResponseDTO();
+        List<Employee> employeeList = employeeRepo.findAll();
+        if(!employeeList.isEmpty()){
+            responseDTO.setData(employeeList);
+            ResponseUtils.handleOkResponse(responseDTO,employeeList,"Employee list retrieved successfully");
+        }else {
+            return ResponseUtils.handleNotFoundResponse(responseDTO, "Employee list not found!");
+        }
+        return responseDTO;
+    }
+
+    @Override
+    public ResponseDTO updateEmployee(EmployeeRequestDTO employeeRequestDTO, Integer id) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        Optional<Employee> employeeOptional = employeeRepo.findById(id);
+
+        if(employeeOptional.isPresent()){
+            Employee currentEmployee = employeeOptional.get();
+            currentEmployee.setEmployeeName(employeeRequestDTO.getEmployeeName());
+            employeeRepo.save(currentEmployee);
+            ResponseUtils.handleOkResponse(responseDTO,currentEmployee,"Employee Updated Successfully!");
+        }else {
+            ResponseUtils.handleNotFoundResponse(responseDTO,"Employee Not Found!");
+        }
+        return responseDTO;
     }
 
 }

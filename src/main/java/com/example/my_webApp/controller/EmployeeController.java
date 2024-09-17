@@ -23,4 +23,18 @@ public class EmployeeController {
         ResponseDTO responseDTO = employeeService.saveEmployee(employeeRequestDTO);
         return ResponseEntity.status(responseDTO.getStatus()).body(responseDTO);
     }
+    @GetMapping
+    public ResponseEntity<ResponseDTO> saveEmployee(){
+        log.info("EmployeeController.saveEmployee() method accessed..");
+        ResponseDTO responseDTO = employeeService.getEmployeeList();
+        return ResponseEntity.status(responseDTO.getStatus()).body(responseDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseDTO> updateEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO, @PathVariable Integer id){
+        log.info("EmployeeController.saveEmployee() method accessed..");
+        ResponseDTO responseDTO = employeeService.updateEmployee(employeeRequestDTO, id);
+        return ResponseEntity.status(responseDTO.getStatus()).body(responseDTO);
+    }
+
 }
